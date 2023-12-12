@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
     pending: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Sticker' }],
     first_name: { type: String, required: true },
     last_name: { type: String, required: true },
-    password: { type: String, required: true,minlength: 8, },
+    password1: { type: String, required: true,minlength: 8, },
     password2: { type: String, required: true,minlength: 8, },
 });
 
@@ -21,15 +21,15 @@ userSchema.pre('save', async function (next) {
     // Hash password and password2 only if they are modified
     if (user.isModified('password') || user.isModified('password2')) {
         const salt = await bcrypt.genSalt(10);
-        const hashPassword = await bcrypt.hash(user.password, salt);
+        const hashPassword1 = await bcrypt.hash(user.password1, salt);
         const hashPassword2 = await bcrypt.hash(user.password2, salt);
 
-        user.password = hashPassword;
+        user.password1 = hashPassword1;
         user.password2 = hashPassword2;
     }
 
     // Check if password and password2 are the same
-    if (user.isModified('password') && user.isModified('password2') && user.password !== user.password2) {
+    if (user.isModified('password') && user.isModified('password2') && user.password1 !== user.password2) {
         return next(new Error('Password and password2 do not match'));
     }
 

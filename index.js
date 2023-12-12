@@ -24,4 +24,4 @@ app.listen(3000, () => {
 
 const routes = require('./routes/routes');
 
-app.use('/api', routes)
+app.use(routes)
