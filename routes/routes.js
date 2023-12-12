@@ -2,14 +2,35 @@ const express = require('express');
 
 const router = express.Router()
 
-module.exports = router;
+const User = require('../model/User');
 
+//Get All Users
+router.get('/get', async (req, res) => {
+    try{
+        const data = await User.find();
+        res.json(data)
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
 
-//Post Method
-router.post('/post', async (req, res) => {
-    const data = new Model({
-        name: req.body.name,
-        age: req.body.age
+//Get by ID Method
+router.get('/get/:id', async (req, res) => {
+    try{
+        const data = await User.findById(req.params.id);
+        res.json(data)
+    }
+    catch(error){
+        res.status(500).json({message: error.message})
+    }
+})
+
+//Post User Method
+router.post('/postUser', async (req, res) => {
+    const data = new User({
+        first_name: req.body.first_name,
+        last_name: req.body.last_name
     })
 
     try {
@@ -21,28 +42,6 @@ router.post('/post', async (req, res) => {
     }
 })
 
-//Get ALL method
-router.get('/getAll', async (req, res) => {
-    try{
-        const data = await Model.find();
-        res.json(data)
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
-
-//Get by ID Method
-router.get('/getOne/:id', async (req, res) => {
-    try{
-        const data = await Model.findById(req.params.id);
-        res.json(data)
-    }
-    catch(error){
-        res.status(500).json({message: error.message})
-    }
-})
-
 //Update by ID Method
 router.patch('/update/:id', async (req, res) => {
     try {
@@ -50,7 +49,7 @@ router.patch('/update/:id', async (req, res) => {
         const updatedData = req.body;
         const options = { new: true };
 
-        const result = await Model.findByIdAndUpdate(
+        const result = await User.findByIdAndUpdate(
             id, updatedData, options
         )
 
@@ -65,10 +64,16 @@ router.patch('/update/:id', async (req, res) => {
 router.delete('/delete/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const data = await Model.findByIdAndDelete(id)
+        const data = await User.findByIdAndDelete(id)
         res.send(`Document with ${data.name} has been deleted..`)
     }
     catch (error) {
         res.status(400).json({ message: error.message })
     }
 })
+
+const Sticker = require('../model/Sticker');
+
+
+
+module.exports = router;
